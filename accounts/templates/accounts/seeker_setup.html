@@ -1,0 +1,81 @@
+{% load static %}
+{% load form_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Setup Your Profile - CampusConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="antialiased font-sans">
+    <div class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-900 via-sky-700 to-teal-500">
+        <div class="bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-700 p-8 rounded-2xl shadow-lg w-full max-w-2xl space-y-6 text-white">
+            <!-- Header -->
+            <div class="text-center">
+                <h1 class="text-3xl font-bold">Complete Your Seeker Profile</h1>
+                <p class="text-gray-300 mt-2">Help us find the best opportunities for you.</p>
+            </div>
+
+            <!-- Django Form -->
+            <form method="POST" action="{% url 'accounts:seeker_setup' %}" class="space-y-5">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Full Name</label>
+                        {{ form.full_name|add_class:"mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-sm text-white placeholder-gray-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500" }}
+                        {% if form.full_name.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.full_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">Email Address</label>
+                        {{ form.email|add_class:"mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-sm text-white placeholder-gray-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500" }}
+                        {% if form.email.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.email.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-300">University / Department</label>
+                    {{ form.university|add_class:"mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-sm text-white placeholder-gray-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500" }}
+                    {% if form.university.errors %}
+                        <p class="text-red-400 text-xs mt-1">{{ form.university.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-300">Skills</label>
+                    {{ form.skills|add_class:"mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-sm text-white placeholder-gray-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500" }}
+                    {% if form.skills.errors %}
+                        <p class="text-red-400 text-xs mt-1">{{ form.skills.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-300">I am interested in...</label>
+                    <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {# form.interests will render as checkbox list #}
+                        {{ form.interests }}
+                        {% if form.interests.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.interests.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit"
+                        class="w-full mt-2 flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-teal-500 transition-colors">
+                        Save &amp; Continue
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

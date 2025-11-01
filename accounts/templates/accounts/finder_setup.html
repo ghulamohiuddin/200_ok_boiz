@@ -1,0 +1,42 @@
+{% load static %}
+{% load form_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Your Finder Profile - CampusConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="antialiased font-sans">
+    <div class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-900 via-sky-700 to-teal-500">
+        <div class="bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-700 p-8 rounded-2xl shadow-lg w-full max-w-2xl space-y-6 text-white">
+            <div class="text-center">
+                <h1 class="text-3xl font-bold">Complete Your Finder Profile</h1>
+                <p class="text-gray-300 mt-2">Let's get you set up to post opportunities.</p>
+            </div>
+
+            <form method="POST" class="space-y-5">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+
+                {% for field in form %}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300">{{ field.label }}</label>
+                        {{ field|add_class:"mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-sm text-white shadow-sm placeholder-gray-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500" }}
+                        {% if field.errors %}
+                            <p class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit"
+                        class="w-full mt-2 flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-teal-500 transition-colors">
+                    Save & Continue
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

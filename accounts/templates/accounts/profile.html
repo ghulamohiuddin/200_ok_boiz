@@ -1,0 +1,21 @@
+<!-- accounts/templates/accounts/profile.html -->
+<!doctype html>
+<html>
+<head><title>Profile</title></head>
+<body>
+  <h1>Hi, {{ user.username }}</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Bio</label><br>
+    <textarea name="bio">{{ user.bio }}</textarea><br>
+    <label>Skills (comma separated)</label><br>
+    <input name="skills" value="{{ user.skills }}"><br>
+    <label><input type="checkbox" name="is_talent_finder" {% if user.is_talent_finder %}checked{% endif %}> Talent Finder</label><br>
+    <label><input type="checkbox" name="is_talent_seeker" {% if user.is_talent_seeker %}checked{% endif %}> Talent Seeker</label><br>
+    <label>Profile picture</label><input type="file" name="profile_picture"><br>
+    <label>Resume</label><input type="file" name="resume"><br>
+    <button type="submit">Save</button>
+  </form>
+  <a href="{% url 'accounts:logout' %}">Logout</a>
+</body>
+</html>
