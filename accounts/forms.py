@@ -4,6 +4,9 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import User
 from .models import SeekerProfile, Interest
 from .models import FinderProfile
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True, help_text='Use your university email if possible.')
@@ -44,3 +47,25 @@ class FinderProfileForm(forms.ModelForm):
         widgets = {
             'opportunities': forms.CheckboxSelectMultiple()
         }
+
+# accounts/forms.py
+
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField(required=True, help_text="Required")
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        # default roles (optional)
+        user.is_talent_seeker = True
+        user.is_talent_finder = False
+        if commit:
+            user.save()
+        return user
+
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(label="Email or Username")

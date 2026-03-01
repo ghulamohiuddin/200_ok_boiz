@@ -1,0 +1,239 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect – The University Talent Finder</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+
+        .gradient-bg {
+            background-color: #1e3a8a;
+            background-image:
+                radial-gradient(at 20% 20%, hsla(222,65%,37%,1) 0px, transparent 50%),
+                radial-gradient(at 80% 10%, hsla(197,88%,48%,1) 0px, transparent 50%),
+                radial-gradient(at 80% 80%, hsla(169,82%,46%,1) 0px, transparent 50%);
+        }
+
+        .btn-shadow-glow {
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
+        }
+
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.03); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 6s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-blue-900 text-gray-100 antialiased">
+
+    <div class="min-h-screen gradient-bg">
+        <!-- Header / Navbar -->
+        <header class="absolute top-0 left-0 w-full z-20">
+            <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <!-- Logo -->
+                <a href="{% url 'landing' %}" class="flex items-center space-x-2 text-2xl font-bold text-white">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none"
+                         xmlns="http://www.w3.org/2000/svg" class="text-teal-400">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="7" r="1.5" fill="currentColor"/>
+                        <circle cx="12" cy="17" r="1.5" fill="currentColor"/>
+                        <circle cx="5" cy="14.5" r="1.5" fill="currentColor"/>
+                        <circle cx="19" cy="14.5" r="1.5" fill="currentColor"/>
+                    </svg>
+                    <span>CampusConnect</span>
+                </a>
+
+                <!-- Desktop Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#features" class="text-white hover:text-teal-300 transition-colors duration-300 font-medium">Learn More</a>
+                    <a href="{% url 'accounts:login' %}" class="text-white hover:text-teal-300 transition-colors duration-300 px-4 py-2 font-medium">Login</a>
+                    <a href="{% url 'accounts:signup' %}" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-5 rounded-full shadow-lg btn-shadow-glow transform hover:scale-105 transition-all duration-300">Sign Up</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden text-white text-2xl hover:text-teal-400 transition-colors duration-300">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden bg-blue-900/95 backdrop-blur-sm p-4 text-center">
+                <a href="#features" class="block py-2 text-white hover:bg-gray-700 rounded-lg">Learn More</a>
+                <a href="{% url 'accounts:login' %}" class="block py-2 text-white hover:bg-gray-700 rounded-lg">Login</a>
+                <a href="{% url 'accounts:signup' %}" class="block py-2 bg-teal-500 text-white font-bold rounded-lg mt-2">Sign Up</a>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <main class="relative pt-24">
+            <section class="container mx-auto px-6 pt-16 pb-16 flex flex-col md:flex-row items-center min-h-[85vh]">
+                <!-- Left Content -->
+                <div class="md:w-1/2 text-center md:text-left mb-12 md:mb-0">
+                    <span class="text-teal-300 text-lg uppercase tracking-widest font-semibold mb-3 block">SURGE '25 Hackathon Project</span>
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-white leading-tight mb-6">CampusConnect</h1>
+                    <h2 class="text-2xl md:text-3xl text-teal-300 font-light mb-8 max-w-lg mx-auto md:mx-0">
+                        Where students connect through opportunities — projects, part-time jobs, collaborations, and more.
+                    </h2>
+                    <p class="text-lg text-gray-300 max-w-lg mx-auto md:mx-0 mb-10">
+                        The University Talent Finder platform for on-campus work, startup gigs, academic collaborations, and competition teams.
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex justify-center md:justify-start space-x-4">
+                        <a href="{% url 'accounts:signup' %}" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-8 rounded-full shadow-lg btn-shadow-glow transform hover:scale-105 transition-all duration-300">
+                            Get Started
+                        </a>
+                        <a href="#features" class="bg-white/10 hover:bg-white/20 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Illustration -->
+                <div class="md:w-1/2 flex justify-center p-8">
+                    <svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" class="w-full max-w-lg h-auto animate-pulse-slow">
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#14b8a6;stop-opacity:1" />
+                            </linearGradient>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+
+                        <path d="M100,50 Q150,0 200,50 T300,50 T400,50" fill="none" stroke="url(#grad1)" stroke-width="3" opacity="0.3"/>
+                        <path d="M50,450 Q150,500 250,450 T450,450" fill="none" stroke="url(#grad1)" stroke-width="3" opacity="0.3"/>
+
+                        <g style="filter:url(#glow);" opacity="0.9">
+                            <circle cx="250" cy="250" r="35" fill="#14b8a6"/>
+                            <circle cx="150" cy="150" r="28" fill="#0ea5e9"/>
+                            <circle cx="350" cy="150" r="28" fill="#0ea5e9"/>
+                            <circle cx="150" cy="350" r="28" fill="#0ea5e9"/>
+                            <circle cx="350" cy="350" r="28" fill="#0ea5e9"/>
+                        </g>
+
+                        <line x1="250" y1="250" x2="150" y2="150" stroke="white" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+                        <line x1="250" y1="250" x2="350" y2="150" stroke="white" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+                        <line x1="250" y1="250" x2="150" y2="350" stroke="white" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+                        <line x1="250" y1="250" x2="350" y2="350" stroke="white" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+
+                        <path d="M240 250 H260 M250 240 V260 M255 245 L265 245 M245 255 L255 255" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Features -->
+    <section id="features" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold text-white">Core Features of CampusConnect</h2>
+                <p class="text-xl text-teal-300 mt-3 max-w-3xl mx-auto">
+                    Build your career, hire your team, all within the university ecosystem.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Features -->
+                <div class="bg-gray-800 rounded-xl p-8 border-t-4 border-teal-500 shadow-xl transform hover:scale-[1.02] transition">
+                    <div class="text-5xl text-teal-400 mb-4"><i class="fas fa-search-dollar"></i></div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Talent Discovery</h3>
+                    <p class="text-gray-300">Browse and apply for on-campus opportunities, from part-time jobs to startup gigs.</p>
+                </div>
+
+                <div class="bg-gray-800 rounded-xl p-8 border-t-4 border-blue-500 shadow-xl transform hover:scale-[1.02] transition">
+                    <div class="text-5xl text-blue-400 mb-4"><i class="fas fa-cogs"></i></div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Smart Matching</h3>
+                    <p class="text-gray-300">Get personalized job recommendations based on your unique skills and profile.</p>
+                </div>
+
+                <div class="bg-gray-800 rounded-xl p-8 border-t-4 border-indigo-500 shadow-xl transform hover:scale-[1.02] transition">
+                    <div class="text-5xl text-indigo-400 mb-4"><i class="fas fa-exchange-alt"></i></div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Dual Roles</h3>
+                    <p class="text-gray-300">Switch between posting and applying without logging out.</p>
+                </div>
+
+                <div class="bg-gray-800 rounded-xl p-8 border-t-4 border-pink-500 shadow-xl transform hover:scale-[1.02] transition">
+                    <div class="text-5xl text-pink-400 mb-4"><i class="fas fa-network-wired"></i></div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Campus Collaboration</h3>
+                    <p class="text-gray-300">Connect with clubs, startups, and professors for real-world projects.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 bg-blue-800/70 text-center">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6">Start discovering opportunities on your campus today!</h2>
+        <a href="{% url 'accounts:signup' %}" class="bg-teal-400 hover:bg-teal-500 text-gray-900 font-extrabold py-4 px-12 rounded-full text-lg shadow-2xl transform hover:scale-110 transition">
+            Sign Up Now
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12">
+        <div class="container mx-auto px-6 text-sm grid grid-cols-2 lg:grid-cols-4 gap-8">
+            <div>
+                <h4 class="text-xl font-bold text-white mb-3">CampusConnect</h4>
+                <p class="text-gray-400">The definitive platform for university students to find and post opportunities.</p>
+            </div>
+            <div>
+                <h4 class="text-xl font-bold text-white mb-3">Contact</h4>
+                <ul class="space-y-2 text-gray-400">
+                    <li><i class="fas fa-envelope text-teal-400 w-4 mr-2"></i> ghulamohiuddin.1@gmail.com</li>
+                    <li><i class="fas fa-phone-alt text-teal-400 w-4 mr-2"></i> 03234590793</li>
+                    <li><i class="fas fa-map-marker-alt text-teal-400 w-4 mr-2"></i> UMT, Johar Town</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-xl font-bold text-white mb-3">Legal</h4>
+                <p class="text-gray-500">Legal documents available on deployment.</p>
+            </div>
+            <div>
+                <h4 class="text-xl font-bold text-white mb-3">Community</h4>
+                <a href="https://github.com/ghulamohiuddin" target="_blank" class="text-gray-400 hover:text-teal-400 transition">
+                    <i class="fab fa-github text-teal-400 mr-2"></i> GitHub
+                </a>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-10 pt-6 text-center text-gray-500">
+            <p>&copy; 2026 CampusConnect — All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                mobileMenu.classList.add('hidden');
+                const id = a.getAttribute('href').substring(1);
+                const target = document.getElementById(id);
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,12 +1,13 @@
+# campusconnect_project/urls.py
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
+from accounts.views import landing_view  # import your landing view
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='index.html'), name='index'),  # landing page
+    path('', landing_view, name='landing'),  # <-- simple function view (NOT .as_view())
     path('accounts/', include('accounts.urls', namespace='accounts')),
 ]
 

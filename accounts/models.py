@@ -19,6 +19,7 @@ class User(AbstractUser):
     skills = models.CharField(max_length=512, blank=True, help_text='Comma separated skills')
     profile_picture = models.ImageField(upload_to='profiles/', null=True, blank=True)
     resume = models.FileField(upload_to='resumes/', null=True, blank=True)
+    university = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.username or self.email

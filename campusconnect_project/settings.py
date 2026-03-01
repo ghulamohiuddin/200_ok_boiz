@@ -141,3 +141,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'   # if using pathlib
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# settings.py
+LOGIN_URL = "accounts:login"        # optional helpful default
+LOGIN_REDIRECT_URL = "accounts:role_selection"
+LOGOUT_REDIRECT_URL = "landing"

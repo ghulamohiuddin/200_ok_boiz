@@ -7,16 +7,11 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import SignUpForm, LoginForm, SeekerProfileForm, FinderProfileForm
-from .models import User, SeekerProfile, Interest
-from .models import FinderProfile
-from .forms import FinderProfileForm
-
-
+from .models import User, SeekerProfile, Interest, FinderProfile
 
 # ==============================
 # AUTH VIEWS
 # ==============================
-
 class SignUpView(View):
     def get(self, request):
         form = SignUpForm()
@@ -26,12 +21,10 @@ class SignUpView(View):
         form = SignUpForm(request.POST, request.FILES or None)
         if form.is_valid():
             user = form.save(commit=False)
-            # default role (can switch later)
             if not user.is_talent_finder and not user.is_talent_seeker:
                 user.is_talent_seeker = True
             user.save()
             login(request, user)
-            # Redirect to role-selection page after signup
             return redirect('accounts:role_selection')
         return render(request, 'accounts/signup.html', {'form': form})
 
@@ -46,20 +39,18 @@ class LoginView(View):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            # ✅ Redirect to role selection instead of profile
             return redirect('accounts:role_selection')
         return render(request, 'accounts/login.html', {'form': form})
 
 
 def logout_view(request):
     logout(request)
-    return redirect('index')  # Replace with your homepage route name
+    return redirect('landing')  # ✅ changed from 'index' → 'landing'
 
 
 # ==============================
-# PROFILE VIEW (basic info edit)
+# PROFILE VIEW
 # ==============================
-
 @login_required
 def profile_view(request):
     user = request.user
@@ -83,7 +74,6 @@ def profile_view(request):
 # ==============================
 # ROLE SELECTION
 # ==============================
-
 @method_decorator(login_required, name='dispatch')
 class RoleSelectionView(View):
     def get(self, request):
@@ -99,24 +89,20 @@ class SetRoleView(View):
             user.is_talent_seeker = True
             user.is_talent_finder = False
             user.save()
-            # redirect to seeker setup form
             return redirect('accounts:seeker_setup')
 
         elif role == 'finder':
             user.is_talent_finder = True
             user.is_talent_seeker = False
             user.save()
-            # redirect to finder setup form
             return redirect('accounts:finder_setup')
 
-        # fallback
         return redirect('accounts:role_selection')
 
 
 # ==============================
 # SEEKER SETUP
 # ==============================
-
 @method_decorator(login_required, name='dispatch')
 class SeekerSetupView(View):
     template_name = 'accounts/seeker_setup.html'
@@ -148,12 +134,10 @@ class SeekerSetupView(View):
             profile.save()
             form.save_m2m()
 
-            # update user role
             request.user.is_talent_seeker = True
             request.user.is_talent_finder = False
             request.user.save()
 
-            # redirect to seeker dashboard
             return redirect('accounts:seeker_dashboard')
 
         return render(request, self.template_name, {'form': form})
@@ -162,7 +146,6 @@ class SeekerSetupView(View):
 # ==============================
 # FINDER SETUP
 # ==============================
-
 @method_decorator(login_required, name='dispatch')
 class FinderProfileSetupView(View):
     template_name = 'accounts/finder_setup.html'
@@ -178,6 +161,11 @@ class FinderProfileSetupView(View):
             finder_profile.user = request.user
             finder_profile.save()
             form.save_m2m()
+
+            request.user.is_talent_finder = True
+            request.user.is_talent_seeker = False
+            request.user.save()
+
             return redirect('accounts:finder_dashboard')
 
         return render(request, self.template_name, {'form': form})
@@ -186,42 +174,9 @@ class FinderProfileSetupView(View):
 # ==============================
 # DASHBOARD VIEWS
 # ==============================
-
 class SeekerDashboardView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'accounts/seeker_dashboard.html')
-
-
-class FinderDashboardView(LoginRequiredMixin, View):
-    def get(self, request):
-        return render(request, 'accounts/finder_dashboard.html')
-
-
-
-
-class FinderProfileSetupView(LoginRequiredMixin, View):
-    template_name = 'accounts/finder_setup.html'
-
-    def get(self, request):
-        form = FinderProfileForm()
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request):
-        form = FinderProfileForm(request.POST)
-        if form.is_valid():
-            finder_profile = form.save(commit=False)
-            finder_profile.user = request.user
-            finder_profile.save()
-            form.save_m2m()
-
-            # set role flag
-            request.user.is_talent_finder = True
-            request.user.is_talent_seeker = False
-            request.user.save()
-
-            # redirect to finder dashboard
-            return redirect('accounts:finder_dashboard')
-        return render(request, self.template_name, {'form': form})
 
 
 class FinderDashboardView(LoginRequiredMixin, View):
@@ -230,3 +185,89 @@ class FinderDashboardView(LoginRequiredMixin, View):
     def get(self, request):
         profile = getattr(request.user, 'finder_profile', None)
         return render(request, self.template_name, {'profile': profile})
+
+
+# ==============================
+# PUBLIC LANDING PAGE
+# ==============================
+# accounts/views.py
+
+
+
+def landing_view(request):
+    """
+    Public landing page — always visible at '/'.
+    Logged-in users stay here unless they click a button to go to their dashboard.
+    """
+    # Simply render the landing page for everyone
+    return render(request, 'accounts/landing.html')
+
+# accounts/views.py (auth-related parts)
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout, authenticate
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from .forms import SignUpForm, LoginForm
+from django.urls import reverse
+
+# Landing (keep as earlier)
+def landing_view(request):
+    return render(request, "accounts/landing.html")
+
+# -----------------------
+# Sign Up
+# -----------------------
+class SignUpView(View):
+    template_name = "accounts/signup.html"
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect("landing")
+        form = SignUpForm()
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request):
+        form = SignUpForm(request.POST, request.FILES or None)
+        if form.is_valid():
+            user = form.save()
+            # Optionally log the user in immediately
+            login(request, user)
+            # Redirect to role selection or dashboard
+            return redirect("accounts:role_selection")
+        return render(request, self.template_name, {"form": form})
+
+
+# -----------------------
+# Login
+# -----------------------
+class LoginView(View):
+    template_name = "accounts/login.html"
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect("landing")
+        form = LoginForm(request)
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request):
+        form = LoginForm(request, data=request.POST)
+        if form.is_valid():
+            # form.get_user() returns authenticated user
+            user = form.get_user()
+            login(request, user)
+            # redirect to role selection or next param
+            next_url = request.GET.get("next") or request.POST.get("next")
+            if next_url:
+                return redirect(next_url)
+            return redirect("accounts:role_selection")
+        return render(request, self.template_name, {"form": form})
+
+
+# -----------------------
+# Logout
+# -----------------------
+def logout_view(request):
+    logout(request)
+    return redirect("landing")
